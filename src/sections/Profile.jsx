@@ -27,18 +27,17 @@ export default function Profile() {
   return (
     <section id="profil" className="relative py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Text */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
-            <span className="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 text-sm font-semibold rounded-full mb-5">
+            <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 text-sm font-semibold rounded-full mb-6 ring-1 ring-inset ring-primary-500/10">
               Profil Pesantren
             </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-900 leading-tight mb-6">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-primary-900 leading-tight mb-6 tracking-tight">
               Warisan Ulama,{" "}
               <span className="text-primary-600">Masa Depan Santri</span>
             </h2>
 
-            <div className="space-y-4 text-gray-600 leading-relaxed">
+            <div className="space-y-4 text-gray-600 text-sm md:text-base leading-relaxed">
               <p>
                 <strong className="text-primary-800">
                   Ma'had Asy-Syakiroh
@@ -64,30 +63,30 @@ export default function Profile() {
               </p>
             </div>
 
-            {/* Quote */}
             <blockquote className="mt-8 border-l-4 border-gold-500 pl-5 py-2">
               <p className="font-arabic text-2xl text-primary-700 leading-loose mb-2">
                 طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ
               </p>
-              <p className="text-sm text-gray-500 italic">
+              <p className="text-xs text-gray-400 italic">
                 "Menuntut ilmu adalah kewajiban bagi setiap Muslim." — H.R. Ibnu
                 Majah
               </p>
             </blockquote>
           </div>
 
-          {/* Right: Pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {pillars.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
                 className="group p-6 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white"
               >
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
-                  <Icon className="w-6 h-6 text-primary-700" />
+                <div className="w-11 h-11 bg-primary-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
+                  <Icon className="w-5 h-5 text-primary-700" />
                 </div>
-                <h3 className="font-bold text-primary-800 mb-2">{title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{desc}</p>
+                <h3 className="font-bold text-primary-800 mb-2 text-sm">
+                  {title}
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>

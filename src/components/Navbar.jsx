@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Beranda", href: "/" },
@@ -16,8 +16,9 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -25,105 +26,170 @@ export default function Navbar() {
     setIsOpen(false);
   }, [location]);
 
-  return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg overflow-hidden">
-              <img
-                src="/logo.png"
-                alt="Logo Ma'had Asy-Syakiroh"
-                className="h-10 w-auto object-contain"
-              />
-            </div>
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-            <div className="hidden sm:block">
-              <p
-                className={`font-bold text-sm leading-tight ${
-                  scrolled ? "text-primary-800" : "text-white"
+  const isHome = location.pathname === "/";
+
+  return (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? "bg-white/96 backdrop-blur-xl shadow-[0_1px_0_0_rgb(0_0_0/0.06)]"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <Link
+              to="/"
+              className="flex items-center gap-3 group flex-shrink-0"
+            >
+              <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl overflow-hidden shadow-md ring-1 ring-white/20 flex-shrink-0 bg-white flex items-center justify-center">
+                <img
+                  src="/logo.png"
+                  alt="Logo Ma'had Asy-Syakiroh"
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
+              <div className="hidden sm:block leading-tight">
+                <p
+                  className={`font-extrabold text-sm tracking-tight transition-colors duration-300 ${
+                    scrolled ? "text-primary-800" : "text-white"
+                  }`}
+                >
+                  Ma'had Asy-Syakiroh
+                </p>
+                <p
+                  className={`text-[11px] font-medium transition-colors duration-300 ${
+                    scrolled ? "text-primary-500" : "text-primary-200"
+                  }`}
+                >
+                  Buntet Pesantren Cirebon
+                </p>
+              </div>
+            </Link>
+
+            <nav
+              className="hidden md:flex items-center gap-1"
+              aria-label="Navigasi utama"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                    scrolled
+                      ? "text-gray-800 hover:text-primary-700 hover:bg-primary-50"
+                      : "text-white/85 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <Link
+                to="/daftar"
+                className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gold-500 text-primary-900 font-bold text-sm rounded-2xl hover:bg-gold-400 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              >
+                Daftar Sekarang
+              </Link>
+
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+                aria-expanded={isOpen}
+                className={`md:hidden w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-200 ${
+                  scrolled
+                    ? "text-gray-700 hover:bg-gray-100"
+                    : "text-white hover:bg-white/10"
                 }`}
               >
-                Ma'had Asy-Syakiroh
-              </p>
-              <p
-                className={`text-xs ${
-                  scrolled ? "text-primary-600" : "text-primary-200"
-                }`}
-              >
-                Buntet Pesantren Cirebon
-              </p>
+                {isOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
             </div>
-          </Link>
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          </div>
+        </div>
+      </header>
+
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+          isOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!isOpen}
+      >
+        <div
+          className="absolute inset-0 bg-primary-950/60 backdrop-blur-sm"
+          onClick={() => setIsOpen(false)}
+        />
+
+        <div
+          className={`absolute top-0 right-0 bottom-0 w-72 bg-white shadow-2xl transition-transform duration-300 ease-spring ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between px-6 h-16 border-b border-gray-100">
+            <span className="font-extrabold text-primary-800 text-sm">
+              Menu
+            </span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <nav className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  scrolled
-                    ? "text-gray-700 hover:text-primary-700 hover:bg-primary-50"
-                    : "text-white/90 hover:text-white hover:bg-white/10"
-                }`}
+                className="flex items-center px-4 py-3 rounded-2xl text-gray-700 font-semibold text-sm hover:bg-primary-50 hover:text-primary-700 transition-all duration-200"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* CTA */}
-          <Link
-            to="/daftar"
-            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gold-500 text-primary-900 font-semibold text-sm rounded-xl hover:bg-gold-400 transition-all duration-200 shadow-md hover:shadow-lg"
-          >
-            Daftar Sekarang
-          </Link>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${
-              scrolled
-                ? "text-gray-700 hover:bg-gray-100"
-                : "text-white hover:bg-white/10"
-            }`}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden transition-all duration-300 overflow-hidden ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="bg-white shadow-xl border-t border-gray-100 px-4 py-4 space-y-1">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="block px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-primary-50 hover:text-primary-700 transition-colors"
+          <div className="px-4 pt-2">
+            <Link
+              to="/daftar"
+              className="flex items-center justify-center w-full py-3.5 bg-gold-500 text-primary-900 font-bold text-sm rounded-2xl hover:bg-gold-400 transition-colors"
             >
-              {link.label}
+              Daftar Sekarang
+            </Link>
+          </div>
+
+          <div className="absolute bottom-8 left-0 right-0 px-6 text-center">
+            <p className="text-xs text-gray-400">
+              Pertanyaan? Hubungi pengurus kami
+            </p>
+            <a
+              href="tel:081572658419"
+              className="text-xs font-semibold text-primary-600 hover:text-primary-700"
+            >
+              0815-7265-8419
             </a>
-          ))}
-          <Link
-            to="/daftar"
-            className="block mt-3 px-4 py-3 bg-gold-500 text-primary-900 font-semibold rounded-xl text-center hover:bg-gold-400 transition-colors"
-          >
-            Daftar Sekarang
-          </Link>
+          </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

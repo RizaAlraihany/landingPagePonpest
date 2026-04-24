@@ -98,8 +98,7 @@ export default function RegistrationFlow() {
             calon santri dapat mendaftar dengan mudah.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 mb-5">
           {steps.map((step, i) => {
             const c = colorMap[step.color];
             const Icon = step.icon;
@@ -107,11 +106,10 @@ export default function RegistrationFlow() {
               <div key={i} className="relative group/card">
                 {i < steps.length - 1 && (
                   <div className="hidden md:flex absolute -right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20">
-                    <ArrowRight className="w-6 h-6 text-white/30" />
+                    <ArrowRight className="w-5 h-5 text-white/30" />
                   </div>
                 )}
-
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2rem] p-8 lg:p-10 h-full shadow-xl hover:shadow-2xl hover:bg-white/[0.15] hover:border-white/30 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 lg:p-8 h-full shadow-xl hover:shadow-2xl hover:bg-white/[0.15] hover:border-white/30 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col">
                   <span
                     className={`absolute -top-4 -right-2 text-8xl font-black ${c.number} select-none transition-transform duration-500 group-hover/card:scale-110`}
                   >

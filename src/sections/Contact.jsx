@@ -58,7 +58,7 @@ export default function Contact() {
             return (
               <div
                 key={c.type}
-                className="bg-white rounded-[2rem] p-8 lg:p-10 border border-slate-200/70 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-primary-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white flex flex-col relative group/card"
+                className="bg-white rounded-[2rem] p-8 lg:p-8 border border-slate-200/70 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-primary-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 bg-white flex flex-col relative group/card"
               >
                 <div className="mb-8">
                   <span
@@ -74,7 +74,7 @@ export default function Contact() {
                 <div className="space-y-6 flex-1">
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-12 h-12 ${style.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover/card:scale-110`}
+                      className={`w-10 h-10 ${style.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover/card:scale-110`}
                     >
                       <Phone className={`w-5 h-5 ${style.iconText}`} />
                     </div>
@@ -93,7 +93,7 @@ export default function Contact() {
 
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-12 h-12 ${style.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover/card:scale-110`}
+                      className={`w-10 h-10 ${style.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover/card:scale-110`}
                     >
                       <MapPin className={`w-5 h-5 ${style.iconText}`} />
                     </div>
