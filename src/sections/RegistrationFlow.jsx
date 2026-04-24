@@ -48,20 +48,17 @@ const steps = [
 
 const colorMap = {
   primary: {
-    bg: "bg-primary-700",
-    light: "bg-primary-50",
-    border: "border-primary-200",
-    text: "text-primary-700",
-    icon: "text-primary-600",
-    number: "text-primary-300",
+    iconBg:
+      "bg-gradient-to-br from-primary-400 to-primary-600 shadow-primary-500/20",
+    iconText: "text-white",
+    number: "text-white/5",
+    check: "text-primary-400",
   },
   gold: {
-    bg: "bg-gold-500",
-    light: "bg-amber-50",
-    border: "border-amber-200",
-    text: "text-amber-700",
-    icon: "text-amber-600",
-    number: "text-amber-300",
+    iconBg: "bg-gradient-to-br from-gold-400 to-gold-600 shadow-gold-500/20",
+    iconText: "text-white",
+    number: "text-white/5",
+    check: "text-gold-400",
   },
 };
 
@@ -69,95 +66,114 @@ export default function RegistrationFlow() {
   return (
     <section
       id="pendaftaran"
-      className="py-20 md:py-28 bg-islamic relative overflow-hidden"
+      className="relative pt-28 md:pt-36 pb-16 md:pb-20 overflow-hidden bg-islamic"
     >
-      {/* Decorative */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 pointer-events-none z-0">
+        <svg
+          viewBox="0 0 1440 100"
+          preserveAspectRatio="none"
+          className="w-full h-14 md:h-20"
+        >
+          <path
+            fill="#ffffff"
+            d="M0,60 C300,120 500,0 720,60 C950,120 1180,0 1440,60 L1440,0 L0,0 Z"
+          />
+        </svg>
+      </div>
+
+      <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <span className="inline-block px-4 py-1.5 bg-white/10 border border-white/20 text-white text-sm font-semibold rounded-full mb-4">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+        <div className="text-center mb-4 md:mb-6">
+          <span className="inline-block px-4 py-1.5 bg-white/10 border border-white/10 text-white text-sm font-semibold rounded-full mb-4 backdrop-blur-md">
             Alur Pendaftaran
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
             3 Langkah Mudah Menjadi Santri
           </h2>
-          <p className="text-primary-200 mt-3 max-w-lg mx-auto">
+          <p className="text-white/70 mt-4 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
             Proses pendaftaran dirancang sesederhana mungkin agar orang tua dan
             calon santri dapat mendaftar dengan mudah.
           </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
           {steps.map((step, i) => {
             const c = colorMap[step.color];
             const Icon = step.icon;
             return (
-              <div key={i} className="relative">
-                {/* Connector arrow (desktop) */}
+              <div key={i} className="relative group/card">
                 {i < steps.length - 1 && (
-                  <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                  <div className="hidden md:flex absolute -right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20">
                     <ArrowRight className="w-6 h-6 text-white/30" />
                   </div>
                 )}
 
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-7 h-full hover:bg-white/15 transition-colors">
-                  {/* Number + Icon */}
-                  <div className="flex items-start justify-between mb-5">
+                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2rem] p-8 lg:p-10 h-full shadow-xl hover:shadow-2xl hover:bg-white/[0.15] hover:border-white/30 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col">
+                  <span
+                    className={`absolute -top-4 -right-2 text-8xl font-black ${c.number} select-none transition-transform duration-500 group-hover/card:scale-110`}
+                  >
+                    {step.number}
+                  </span>
+
+                  <div className="relative z-10 flex flex-col h-full">
                     <div
-                      className={`w-12 h-12 ${c.bg} rounded-2xl flex items-center justify-center shadow-lg`}
+                      className={`w-14 h-14 ${c.iconBg} rounded-2xl flex items-center justify-center mb-8 shadow-lg transition-transform duration-300 group-hover/card:scale-110`}
                     >
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className={`w-7 h-7 ${c.iconText}`} />
                     </div>
-                    <span
-                      className={`text-5xl font-extrabold ${c.number} opacity-40`}
-                    >
-                      {step.number}
-                    </span>
+
+                    <h3 className="text-xl font-bold text-white mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-white/70 text-sm leading-relaxed mb-8 flex-1">
+                      {step.desc}
+                    </p>
+
+                    <ul className="space-y-3 mt-auto">
+                      {step.details.map((d) => (
+                        <li
+                          key={d}
+                          className="flex items-start gap-3 text-sm text-white/90 font-medium"
+                        >
+                          <CheckCircle2
+                            className={`w-5 h-5 ${c.check} flex-shrink-0 mt-0.5`}
+                          />
+                          <span className="leading-snug">{d}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <h3 className="text-xl font-extrabold text-white mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-primary-200 text-sm leading-relaxed mb-5">
-                    {step.desc}
-                  </p>
-
-                  {/* Detail list */}
-                  <ul className="space-y-2">
-                    {step.details.map((d) => (
-                      <li
-                        key={d}
-                        className="flex items-center gap-2 text-sm text-primary-100"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-gold-400 flex-shrink-0" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* CTA */}
         <div className="text-center">
           <Link
             to="/daftar"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gold-500 text-primary-900 font-bold text-base rounded-xl hover:bg-gold-400 transition-all duration-200 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-gold-500 text-gray-900 font-bold text-base rounded-full hover:bg-gold-400 transition-all duration-300 shadow-[0_8px_30px_rgb(234,179,8,0.3)] hover:shadow-[0_8px_30px_rgb(234,179,8,0.5)] hover:-translate-y-1"
           >
             Mulai Pendaftaran Sekarang
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="text-primary-300 text-sm mt-4">
+          <p className="text-white/60 text-sm mt-5 font-medium">
             Butuh bantuan? Hubungi pengurus kami langsung.
           </p>
         </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 z-0">
+        <svg
+          viewBox="0 0 1440 80"
+          preserveAspectRatio="none"
+          className="w-full h-12 md:h-20 fill-white"
+        >
+          <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" />
+        </svg>
       </div>
     </section>
   );

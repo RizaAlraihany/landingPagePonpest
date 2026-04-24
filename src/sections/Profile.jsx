@@ -25,7 +25,7 @@ const pillars = [
 
 export default function Profile() {
   return (
-    <section id="profil" className="py-20 md:py-28 bg-white">
+    <section id="profil" className="relative py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Text */}
