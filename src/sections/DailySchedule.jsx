@@ -1,3 +1,5 @@
+import { FadeInSection } from "../components/FadeInSection";
+
 const schedule = [
   { time: "04.00", activity: "Bangun Tidur", category: "daily" },
   { time: "04.30", activity: "Subuh Berjamaah & Dzikir", category: "ibadah" },
@@ -78,8 +80,8 @@ function TimelineItem({ item, isLast }) {
 
       {/* Card */}
       <div className="flex-1 pb-3">
-        <div className="bg-white  border border-gray-200 rounded-xl px-4 py-3 md:px-5 md:py-3.5 shadow-card group-hover/item:shadow-card-hover group-hover/item:border-gray-200 group-hover/item:-translate-y-0.5 transition-all duration-300">
-          <div className="flex flex-col flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 md:px-5 md:py-3.5 shadow-card group-hover/item:shadow-card-hover group-hover/item:border-primary-200 group-hover/item:-translate-y-0.5 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-semibold text-gray-800 text-sm group-hover/item:text-primary-900 transition-colors">
                 {item.activity}
@@ -110,61 +112,67 @@ export default function DailySchedule() {
   return (
     <section id="kegiatan" className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* header */}
-        <div className="text-center mb-4 md:mb-6">
-          <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 text-sm font-semibold rounded-full mb-4 ring-1 ring-inset ring-primary-500/15">
-            Kegiatan Harian
-          </span>
-          <h2 className="section-title">Jadwal Santri Sehari-hari</h2>
-          <p className="section-desc text-gray-500 text-sm md:text-base">
-            Setiap hari dirancang penuh makna — seimbang antara ibadah, ilmu,
-            dan istirahat.
-          </p>
-        </div>
+        <FadeInSection delay={0.1}>
+          {/* header */}
+          <div className="text-center mb-4 md:mb-6">
+            <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 text-sm font-semibold rounded-full mb-4 ring-1 ring-inset ring-primary-500/15">
+              Kegiatan Harian
+            </span>
+            <h2 className="section-title">Jadwal Santri Sehari-hari</h2>
+            <p className="section-desc text-gray-500 text-sm md:text-base mt-3 max-w-2xl mx-auto">
+              Setiap hari dirancang penuh makna — seimbang antara ibadah, ilmu,
+              dan istirahat.
+            </p>
+          </div>
 
-        {/* Legend */}
-        <div className="flex flex-wrap justify-center gap-2 mb-4">
-          {Object.entries(categoryConfig).map(([, cfg]) => (
-            <div
-              key={cfg.label}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ring-inset ${cfg.badge}`}
-            >
-              <span>{cfg.emoji}</span>
-              {cfg.label}
-            </div>
-          ))}
-        </div>
+          {/* Legend */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {Object.entries(categoryConfig).map(([, cfg]) => (
+              <div
+                key={cfg.label}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ring-inset ${cfg.badge}`}
+              >
+                <span>{cfg.emoji}</span>
+                {cfg.label}
+              </div>
+            ))}
+          </div>
+        </FadeInSection>
 
         {/* ── Timeline grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 lg:gap-x-16">
           {/* Left column */}
           <div>
             {leftCol.map((item, i) => (
-              <TimelineItem
-                key={`${item.time}-${item.activity}`}
-                item={item}
-                isLast={i === leftCol.length - 1}
-              />
+              <FadeInSection key={`${item.time}-${item.activity}`} delay={0.1 + i * 0.05}>
+                <TimelineItem
+                  item={item}
+                  isLast={i === leftCol.length - 1}
+                />
+              </FadeInSection>
             ))}
           </div>
 
           {/* Right column */}
           <div>
             {rightCol.map((item, i) => (
-              <TimelineItem
-                key={`${item.time}-${item.activity}`}
-                item={item}
-                isLast={i === rightCol.length - 1}
-              />
+              <FadeInSection key={`${item.time}-${item.activity}`} delay={0.3 + i * 0.05}>
+                <TimelineItem
+                  item={item}
+                  isLast={i === rightCol.length - 1}
+                />
+              </FadeInSection>
             ))}
           </div>
         </div>
 
-        {/* Footer note */}
-        <p className="text-center text-xs text-gray-400 mt-8 font-medium">
-          * Jadwal dapat berubah pada hari-hari tertentu, hari raya, dan
-          kegiatan pesantren khusus.
-        </p>
+        <FadeInSection delay={0.6}>
+          {/* Footer note */}
+          <p className="text-center text-xs text-gray-400 mt-8 font-medium">
+            * Jadwal dapat berubah pada hari-hari tertentu, hari raya, dan
+            kegiatan pesantren khusus.
+          </p>
+        </FadeInSection>
       </div>
     </section>
   );

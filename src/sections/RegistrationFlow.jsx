@@ -6,6 +6,7 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
+import { FadeInSection } from "../components/FadeInSection";
 
 const steps = [
   {
@@ -86,82 +87,89 @@ export default function RegistrationFlow() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-        <div className="text-center mb-4 md:mb-6">
-          <span className="inline-block px-4 py-1.5 bg-white/10 border border-white/10 text-white text-sm font-semibold rounded-full mb-4 backdrop-blur-md">
-            Alur Pendaftaran
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            3 Langkah Mudah Menjadi Santri
-          </h2>
-          <p className="text-white/70 mt-4 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
-            Proses pendaftaran dirancang sesederhana mungkin agar orang tua dan
-            calon santri dapat mendaftar dengan mudah.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 mb-5">
+        <FadeInSection delay={0.1}>
+          <div className="text-center mb-10 md:mb-16">
+            <span className="inline-block px-4 py-1.5 bg-white/10 border border-white/10 text-white text-sm font-semibold rounded-full mb-4 backdrop-blur-md">
+              Alur Pendaftaran
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+              3 Langkah Mudah Menjadi Santri
+            </h2>
+            <p className="text-white/70 mt-4 max-w-lg mx-auto text-sm md:text-base leading-relaxed">
+              Proses pendaftaran dirancang sesederhana mungkin agar orang tua dan
+              calon santri dapat mendaftar dengan mudah.
+            </p>
+          </div>
+        </FadeInSection>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 mb-12">
           {steps.map((step, i) => {
             const c = colorMap[step.color];
             const Icon = step.icon;
             return (
-              <div key={i} className="relative group/card">
-                {i < steps.length - 1 && (
-                  <div className="hidden md:flex absolute -right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20">
-                    <ArrowRight className="w-5 h-5 text-white/30" />
-                  </div>
-                )}
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 lg:p-8 h-full shadow-xl hover:shadow-2xl hover:bg-white/[0.15] hover:border-white/30 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col">
-                  <span
-                    className={`absolute -top-4 -right-2 text-8xl font-black ${c.number} select-none transition-transform duration-500 group-hover/card:scale-110`}
-                  >
-                    {step.number}
-                  </span>
-
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div
-                      className={`w-14 h-14 ${c.iconBg} rounded-2xl flex items-center justify-center mb-8 shadow-lg transition-transform duration-300 group-hover/card:scale-110`}
-                    >
-                      <Icon className={`w-7 h-7 ${c.iconText}`} />
+              <FadeInSection key={i} delay={0.2 + i * 0.1}>
+                <div className="relative group/card h-full">
+                  {i < steps.length - 1 && (
+                    <div className="hidden md:flex absolute -right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20">
+                      <ArrowRight className="w-5 h-5 text-white/30" />
                     </div>
+                  )}
+                  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-7 lg:p-8 h-full shadow-xl hover:shadow-2xl hover:bg-white/[0.15] hover:border-white/30 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col">
+                    <span
+                      className={`absolute -top-4 -right-2 text-8xl font-black ${c.number} select-none transition-transform duration-500 group-hover/card:scale-110`}
+                    >
+                      {step.number}
+                    </span>
 
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-8 flex-1">
-                      {step.desc}
-                    </p>
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div
+                        className={`w-14 h-14 ${c.iconBg} rounded-2xl flex items-center justify-center mb-8 shadow-lg transition-transform duration-300 group-hover/card:scale-110`}
+                      >
+                        <Icon className={`w-7 h-7 ${c.iconText}`} />
+                      </div>
 
-                    <ul className="space-y-3 mt-auto">
-                      {step.details.map((d) => (
-                        <li
-                          key={d}
-                          className="flex items-start gap-3 text-sm text-white/90 font-medium"
-                        >
-                          <CheckCircle2
-                            className={`w-5 h-5 ${c.check} flex-shrink-0 mt-0.5`}
-                          />
-                          <span className="leading-snug">{d}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      <h3 className="text-xl font-bold text-white mb-3">
+                        {step.title}
+                      </h3>
+                      <p className="text-white/70 text-sm leading-relaxed mb-8 flex-1">
+                        {step.desc}
+                      </p>
+
+                      <ul className="space-y-3 mt-auto">
+                        {step.details.map((d) => (
+                          <li
+                            key={d}
+                            className="flex items-start gap-3 text-sm text-white/90 font-medium"
+                          >
+                            <CheckCircle2
+                              className={`w-5 h-5 ${c.check} flex-shrink-0 mt-0.5`}
+                            />
+                            <span className="leading-snug">{d}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </FadeInSection>
             );
           })}
         </div>
 
-        <div className="text-center">
-          <Link
-            to="/daftar"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gold-500 text-gray-900 font-bold text-base rounded-full hover:bg-gold-400 transition-all duration-300 shadow-[0_8px_30px_rgb(234,179,8,0.3)] hover:shadow-[0_8px_30px_rgb(234,179,8,0.5)] hover:-translate-y-1"
-          >
-            Mulai Pendaftaran Sekarang
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-          <p className="text-white/60 text-sm mt-5 font-medium">
-            Butuh bantuan? Hubungi pengurus kami langsung.
-          </p>
-        </div>
+        <FadeInSection delay={0.5}>
+          <div className="text-center">
+            <Link
+              to="/daftar"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gold-500 text-gray-900 font-bold text-base rounded-full hover:bg-gold-400 transition-all duration-300 shadow-[0_8px_30px_rgb(234,179,8,0.3)] hover:shadow-[0_8px_30px_rgb(234,179,8,0.5)] hover:-translate-y-1"
+            >
+              Mulai Pendaftaran Sekarang
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <p className="text-white/60 text-sm mt-5 font-medium">
+              Butuh bantuan? Hubungi pengurus kami langsung.
+            </p>
+          </div>
+        </FadeInSection>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-0">

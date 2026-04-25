@@ -1,6 +1,6 @@
 const APPS_SCRIPT_URL =
   import.meta.env.VITE_APPS_SCRIPT_URL ||
-  "https://script.google.com/macros/s/AKfycbxDMoZCTZfhVOyyJ97xHR3dSrQmIiLwhhoyi91aqPYBDblSHewa1hU0gtkSCaZK4RUffw/exec";
+  "https://script.google.com/macros/s/AKfycbw9iWY2BpGM-HZ3JXbsJ_AP7IfqrhtytaPCa-UQ20fI4CJxPX2wd1U0ZyPe0qiMVWS0uQ/exec";
 
 /**
  * Submit registration data to Google Spreadsheet via Apps Script
