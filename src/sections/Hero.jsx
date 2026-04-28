@@ -1,148 +1,266 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, Users, Award } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import { motion } from "framer-motion";
-
-const stats = [
-  { icon: BookOpen, label: "Program Pendidikan", value: "10+" },
-  { icon: Users, label: "Santri Aktif", value: "500+" },
-  { icon: Award, label: "Tahun Berdiri", value: "1758" },
-];
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.2, delayChildren: 0.1 },
   },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] },
+    transition: { duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] },
   },
 };
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-islamic pt-28 md:pt-32 pb-24 md:pb-28">
-      {/* Background Effects */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-white/5 blur-[120px] -translate-y-1/4 translate-x-1/4 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary-900/40 blur-[100px] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-primary-950/30 via-transparent to-primary-950/80 pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 w-full z-10 flex flex-col justify-center h-full">
-        <motion.div 
+    <section className="relative w-full bg-islamic overflow-hidden pt-20 md:pt-24 min-h-screen lg:min-h-[90vh] flex flex-col justify-center">
+      {/* MOBILE */}
+      <div className="lg:hidden w-full px-2 pt-5 pb-10 flex flex-col items-center relative z-20">
+        <motion.div
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="grid xl:grid-cols-2 gap-8 xl:gap-12 items-center"
+          className="relative z-20 text-center w-full max-w-sm mx-auto bg-gradient-to-b from-primary-950/75 to-primary-900/70 backdrop-blur-2xl border border-white/10 rounded-[28px] p-5 sm:p-7 shadow-[0_10px_40px_rgba(0,0,0,0.45)] overflow-hidden"
         >
-          {/* Left Content */}
-          <div className="text-left max-w-2xl">
-            <motion.div variants={fadeUp}>
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white/90 text-xs font-medium mb-6 shadow-lg shadow-black/10">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-gold-500"></span>
-                </span>
-                Penerimaan Santri Baru 2025/2026
-              </div>
-            </motion.div>
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-            <motion.div variants={fadeUp}>
-              <p className="font-arabic text-2xl md:text-3xl text-gold-400 mb-2 tracking-wide opacity-90 leading-loose">
-                مَعْهَدُ الشَّاكِرَةِ
-              </p>
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-white leading-[1.1] mb-4 tracking-tight text-balance">
-                Ma'had <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-500">Asy-Syakiroh</span>
-                <br />
-                Buntet Pesantren
-              </h1>
-            </motion.div>
-
-            <motion.div variants={fadeUp}>
-              <p className="text-base md:text-lg text-white/70 leading-relaxed mb-8 max-w-xl text-balance">
-                Mencetak santri <span className="text-gold-300 font-semibold">berilmu</span>,{" "}
-                <span className="text-gold-300 font-semibold">berakhlak</span>,
-                dan berlandaskan nilai Islam Ahlussunnah wal Jamaah di lingkungan pesantren terpercaya sejak 1758.
-              </p>
-            </motion.div>
-
-            <motion.div variants={fadeUp}>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link
-                  to="/daftar"
-                  className="inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-gold-500 text-primary-950 font-bold text-sm rounded-xl hover:bg-gold-400 transition-all duration-300 shadow-[0_0_30px_rgba(234,179,8,0.2)] hover:shadow-[0_0_50px_rgba(234,179,8,0.3)] hover:-translate-y-0.5"
-                >
-                  Daftar Sekarang
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <a
-                  href="#profil"
-                  className="inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-white/5 border border-white/10 text-white font-semibold text-sm rounded-xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-md"
-                >
-                  Pelajari Lebih Lanjut
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Mobile Stats */}
-            <motion.div variants={fadeUp}>
-              <div className="mt-8 grid grid-cols-3 gap-3 max-w-md xl:hidden">
-                {stats.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl">
-                    <Icon className="w-4 h-4 text-gold-400 mx-auto mb-1.5" />
-                    <p className="text-lg font-bold text-white mb-0.5">{value}</p>
-                    <p className="text-[10px] text-white/60 uppercase tracking-wider">{label}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Content / Desktop Illustration */}
-          <div className="hidden xl:flex flex-col items-center justify-center relative">
-            <motion.div variants={fadeUp} className="relative z-10 w-full flex justify-center">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-gold-500/20 to-primary-500/20 blur-[50px] rounded-full" />
-                <div className="absolute -inset-2 border border-white/10 rounded-3xl rotate-3 backdrop-blur-sm" />
-                <div className="absolute -inset-2 border border-white/10 rounded-3xl -rotate-3 bg-white/5 backdrop-blur-sm" />
-                
+          <div className="relative w-full mb-3">
+            <div className="flex items-end justify-between w-full">
+              <motion.div
+                variants={fadeUp}
+                className="relative z-10 flex justify-end"
+              >
                 <img
-                  src="/santri.png"
-                  alt="Santri Ma'had Asy-Syakiroh"
-                  className="relative z-20 max-h-[280px] xl:max-h-[320px] 2xl:max-h-[360px] object-contain drop-shadow-2xl"
+                  src="/nyai.png"
+                  alt="Nyai Pengasuh"
+                  className="w-[122px] sm:w-[142px] h-auto object-contain -pl-2"
+                  style={{
+                    filter:
+                      "drop-shadow(0 8px 20px rgba(0,0,0,0.45)) drop-shadow(0 0 10px rgba(212,175,55,0.12))",
+                  }}
                 />
-              </div>
-            </motion.div>
+              </motion.div>
 
-            {/* Desktop Stats */}
-            <motion.div variants={fadeUp} className="w-full mt-8 z-20">
-              <div className="grid grid-cols-3 gap-3 w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl">
-                {stats.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="text-center group">
-                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 group-hover:bg-gold-500/20 transition-all duration-300">
-                      <Icon className="w-4 h-4 text-gold-400" />
-                    </div>
-                    <p className="text-xl font-bold text-white mb-0.5">{value}</p>
-                    <p className="text-[10px] text-white/60 uppercase tracking-wider font-medium">{label}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+              <div className="flex-1" />
+
+              <motion.div
+                variants={fadeUp}
+                className="relative z-10 flex justify-start"
+              >
+                <img
+                  src="/abah.png"
+                  alt="Abah Pengasuh"
+                  className="w-[120px] sm:w-[142px] h-auto -pr-2 object-contain"
+                  style={{
+                    filter:
+                      "drop-shadow(0 8px 20px rgba(0,0,0,0.45)) drop-shadow(0 0 10px rgba(212,175,55,0.12))",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src = "/santri.png";
+                  }}
+                />
+              </motion.div>
+            </div>
+
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pt-2 pointer-events-none">
+              <motion.div
+                variants={fadeUp}
+                className="pointer-events-auto text-center flex flex-col items-center"
+              >
+                <h1 className="text-[20px] sm:text-[24px] font-extrabold text-white leading-[1.1] tracking-tight uppercase drop-shadow-md">
+                  Penerimaan
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400">
+                    Santri Baru
+                  </span>
+                </h1>
+
+                <p className="w-fit -mt-[1px] border border-primary-600/10 bg-primary-600/20 px-2 py-1 rounded-full text-white/80 text-[8px] sm:text-[9px] leading-none font-semibold uppercase tracking-[0.08em]">
+                  Tahun Ajaran 2026/2027
+                </p>
+              </motion.div>
+              <motion.div variants={fadeUp} className="pointer-events-auto mt-1">
+                <img
+                  src="/arabAsqWhite.png"
+                  alt="مَعْهَدُ الشَّاكِرَةِ"
+                  className="w-[90px] sm:w-[105px] opacity-90 mx-auto"
+                  style={{
+                    filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.35))",
+                  }}
+                  onError={(e) => {
+                    e.currentTarget.src = "/santri.png";
+                  }}
+                />
+              </motion.div>
+            </div>
+
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[78%] h-[78%] bg-gold-500/10 blur-3xl rounded-full z-0 pointer-events-none" />
           </div>
+
+          <motion.div
+            variants={fadeUp}
+            className="w-24 h-[1.5px] bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto my-4 rounded-full opacity-70"
+          />
+
+          <motion.div variants={fadeUp}>
+            <p className="text-white/75 text-[10px] sm:text-[11px] leading-[1.45] font-medium mb-6 tracking-wide">
+              Pondok Pesantren Putra-Putri
+              <span className="text-gold-300 font-semibold">
+                {" "}Asy-Syakiroh 1 &amp; 2
+              </span>
+              <br />
+              <span className="text-white/45 text-[8px] uppercase tracking-[0.18em]">
+                Yayasan Lembaga Pendidikan Islam
+              </span>
+              <br />
+              <span className="text-white/45 text-[8px] uppercase tracking-[0.18em]">
+                Buntet Pesantren · Cirebon
+              </span>
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center"
+          >
+            <Link
+              to="/daftar"
+              className="w-full inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-gold-500 to-gold-600 text-primary-950 font-bold text-sm rounded-2xl shadow-lg shadow-gold-500/20 hover:shadow-gold-500/40hover:from-gold-400 hover:to-gold-500 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+            >
+              Daftar Sekarang
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <a
+              href="#profil"
+              className="w-full inline-flex justify-center items-center gap-2 px-6 py-3.5 bg-white/5 border border-white/10 text-white/90 font-semibold text-sm rounded-2xl hover:bg-white/10 hover:border-white/20 hover:text-white transition-all duration-300 backdrop-blur-sm"
+            >
+              <Info className="w-4 h-4" />
+              Pelajari Lebih Lanjut
+            </a>
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* Decorative Wave Divider */}
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none z-20">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="block w-full h-12 md:h-16 fill-white translate-y-1 outline-none border-none">
+      {/* DESKTOP */}
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex-1 hidden lg:flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-4 items-center w-full">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="hidden lg:flex lg:col-span-3 justify-start items-center relative z-20"
+          >
+            <img
+              src="/nyai.png"
+              alt="Nyai Pengasuh"
+              className="h-[300px] md:h-[400px] lg:h-[550px] xl:h-[650px] w-auto object-contain drop-shadow-2xl lg:-translate-y-6"
+            />
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-6 flex flex-col items-center justify-center text-center lg:py-8 relative z-30"
+          >
+            <motion.div variants={fadeUp} className="mb-6">
+              <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-gold-600 to-gold-400 text-primary-950 text-xs md:text-sm font-black tracking-[0.15em] uppercase rounded-full shadow-lg shadow-gold-500/30 ring-2 ring-gold-300/50">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-900 opacity-100" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-950" />
+                </span>
+                Tahun Ajaran 2026/2027
+              </span>
+            </motion.div>
+
+            <motion.div variants={fadeUp} className="mb-3 lg:mb-6 w-full">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black text-white leading-[1.15] tracking-tight uppercase max-w-2xl mx-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)]">
+                Penerimaan
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-100 to-gray-400">
+                  Santri Baru
+                </span>
+              </h1>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="mb-4 lg:mb-8 max-w-lg mx-auto"
+            >
+              <p className="text-white/95 text-xs sm:text-sm md:text-base lg:text-base xl:text-lg font-medium leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                Pondok Pesantren Putra-Putri{" "}
+                <span className="text-gold-300 font-bold">
+                  Asy-Syakiroh 1 & 2
+                </span>
+                <br />
+                Buntet Pesantren Cirebon
+              </p>
+
+              <img
+                src="/arabAsqWhite.png"
+                alt="مَعْهَدُ الشَّاكِرَةِ"
+                className="w-[100px] opacity-90 mt-3 mx-auto"
+                onError={(e) => {
+                  e.currentTarget.src = "/santri.png";
+                }}
+              />
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="flex flex-row items-center gap-4 w-full justify-center"
+            >
+              <Link
+                to="/daftar"
+                className="inline-flex justify-center items-center gap-2 px-8 py-4 bg-gold-500 text-primary-950 font-bold text-base rounded-full hover:bg-gold-400 transition-all duration-300"
+              >
+                Daftar Sekarang
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+
+              <a
+                href="#profil"
+                className="inline-flex justify-center items-center gap-2 px-8 py-4 bg-white/10 border border-white/20 text-white font-bold text-base rounded-full hover:bg-white/20 transition-all duration-300 backdrop-blur-md"
+              >
+                <Info className="w-5 h-5" />
+                Pelajari Lebih Lanjut
+              </a>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="hidden lg:flex lg:col-span-3 justify-end items-center relative z-20"
+          >
+            <img
+              src="/abah.png"
+              alt="Abah Pengasuh"
+              className="h-[300px] md:h-[400px] lg:h-[550px] xl:h-[650px] w-auto object-contain drop-shadow-2xl lg:-translate-y-6"
+              onError={(e) => {
+                e.currentTarget.src = "/santri.png";
+              }}
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none z-30">
+        <svg
+          viewBox="0 0 1440 80"
+          preserveAspectRatio="none"
+          className="block w-full h-8 md:h-16 fill-white translate-y-1"
+        >
           <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" />
         </svg>
       </div>

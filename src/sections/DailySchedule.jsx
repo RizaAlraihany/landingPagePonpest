@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { FadeInSection } from "../components/FadeInSection";
 
 const schedule = [
@@ -167,11 +169,18 @@ export default function DailySchedule() {
         </div>
 
         <FadeInSection delay={0.6}>
-          {/* Footer note */}
           <p className="text-center text-xs text-gray-400 mt-8 font-medium">
             * Jadwal dapat berubah pada hari-hari tertentu, hari raya, dan
             kegiatan pesantren khusus.
           </p>
+          <div className="text-center mt-6">
+            <Link
+              to="/daftar"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary-700 text-white font-bold text-sm rounded-full hover:bg-primary-600 transition-all duration-300 shadow-lg shadow-primary-900/20 hover:-translate-y-0.5"
+            >
+              Tertarik? Daftar Sekarang <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </FadeInSection>
       </div>
     </section>

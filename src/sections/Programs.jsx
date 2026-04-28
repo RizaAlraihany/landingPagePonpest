@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   GraduationCap,
   BookOpen,
@@ -5,6 +6,7 @@ import {
   BookMarked,
   Cpu,
   Stethoscope,
+  ArrowRight,
 } from "lucide-react";
 import { FadeInSection } from "../components/FadeInSection";
 import { StaggerContainer, StaggerItem } from "../components/StaggerContainer";
@@ -164,6 +166,17 @@ export default function Programs() {
             </div>
           </StaggerItem>
         </StaggerContainer>
+
+        <FadeInSection delay={0.5}>
+          <div className="text-center mt-10">
+            <Link
+              to="/daftar"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-gold-500 text-primary-950 font-bold text-sm rounded-full hover:bg-gold-400 transition-all duration-300 shadow-[0_8px_30px_rgb(234,179,8,0.25)] hover:shadow-[0_8px_30px_rgb(234,179,8,0.4)] hover:-translate-y-0.5"
+            >
+              Daftar Sekarang <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </FadeInSection>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-0">

@@ -1,4 +1,5 @@
-import { Phone, MapPin, MessageCircle } from "lucide-react";
+import { Phone, MapPin, MessageCircle, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { FadeInSection } from "../components/FadeInSection";
 
 const contacts = [
@@ -135,6 +136,14 @@ export default function Contact() {
           <p className="text-center font-medium text-gray-400 text-sm mt-12">
             Jam layanan: Setiap hari pukul 08.00 – 20.00 WIB
           </p>
+          <div className="text-center mt-5">
+            <Link
+              to="/daftar"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary-700 text-white font-bold text-sm rounded-full hover:bg-primary-600 transition-all duration-300 shadow-lg shadow-primary-900/20 hover:-translate-y-0.5"
+            >
+              Isi Formulir Pendaftaran <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </FadeInSection>
       </div>
     </section>
