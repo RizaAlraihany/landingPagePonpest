@@ -1,82 +1,59 @@
-const APPS_SCRIPT_URL =
-  import.meta.env.VITE_APPS_SCRIPT_URL ||
-  "https://script.google.com/macros/s/AKfycbyshqvvZBl5Od_6KFQkBD9-f0kvkKRCPedeRe-1lUysi2hGoUy27AvRMIRMyB3BD_Mu/exec";
+const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL;
 
 /**
- * Convert a File object to Base64 string
+ * Mengubah File object menjadi Base64 string lengkap dengan prefix data-url
  */
-async function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(",")[1]); // strip data-url prefix
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+const toBase64 = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
 
-/**
- * Submit registration data to Google Spreadsheet via Apps Script.
- *
- * WHY GET instead of POST?
- * Google Apps Script /exec always 302-redirects. Browsers convert
- * POST→GET on redirect (RFC 2616), so doPost() never fires and the
- * body is silently lost. Sending data as a URL query param via GET
- * is the only reliable no-cors approach.
- *
- * File uploads (fotoKK, fotoIjazah) are NOT sent as base64 here
- * (too large for a URL). The spreadsheet notes they must be brought
- * in person ("wajib dibawa ketika daftar offline").
- *
- * @param {Object} formData - Form data from RegistrationForm
- * @returns {Promise<Object>} Response indicator
- */
 export async function submitToSpreadsheet(formData) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("GANTI")) {
-    throw new Error("URL Google Apps Script belum dikonfigurasi. Hubungi admin.");
+  if (!APPS_SCRIPT_URL) {
+    throw new Error("URL Google Apps Script belum dikonfigurasi. Periksa file .env di root project.");
   }
-
-  // Build payload — text fields only (no base64 files)
-  const payload = {
-    namaLengkap:        formData.namaLengkap        || "",
-    nisn:               formData.nisn               || "",
-    tempatTanggalLahir: formData.tempatTanggalLahir || "",
-    jenisKelamin:       formData.jenisKelamin       || "",
-    fotoKKBase64:       "",   // dikirim offline
-    fotoKKName:         formData.fotoKK instanceof File ? formData.fotoKK.name : "",
-    fotoIjazahBase64:   "",   // dikirim offline
-    fotoIjazahName:     formData.fotoIjazah instanceof File ? formData.fotoIjazah.name : "",
-    masukPendidikan:    formData.masukPendidikan    || "",
-    alamat:             formData.alamat             || "",
-    namaAyah:           formData.namaAyah           || "",
-    namaIbu:            formData.namaIbu            || "",
-    noTelepon:          formData.noTelepon           || "",
-    email:              formData.email              || "",
-    _timestamp:         new Date().toISOString(),
-    _source:            "website",
-  };
-
-  // Encode payload as URL query param
-  const url = `${APPS_SCRIPT_URL}?payload=${encodeURIComponent(JSON.stringify(payload))}`;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000);
 
   try {
-    await fetch(url, {
-      method: "GET",
+    // Proses konversi foto ke Base64 jika ada file yang diunggah
+    const fotoKKBase64 = formData.fotoKK instanceof File ? await toBase64(formData.fotoKK) : "";
+    const fotoIjazahBase64 = formData.fotoIjazah instanceof File ? await toBase64(formData.fotoIjazah) : "";
+
+    const payload = {
+      namaLengkap: formData.namaLengkap || "",
+      nisn: formData.nisn || "",
+      tempatTanggalLahir: formData.tempatTanggalLahir || "",
+      jenisKelamin: formData.jenisKelamin || "",
+      fotoKKBase64: fotoKKBase64,
+      fotoKKName: formData.fotoKK instanceof File ? formData.fotoKK.name : "",
+      fotoIjazahBase64: fotoIjazahBase64,
+      fotoIjazahName: formData.fotoIjazah instanceof File ? formData.fotoIjazah.name : "",
+      masukPendidikan: formData.masukPendidikan || "",
+      alamat: formData.alamat || "",
+      namaAyah: formData.namaAyah || "",
+      namaIbu: formData.namaIbu || "",
+      noTelepon: formData.noTelepon || "",
+      email: formData.email || "",
+      _timestamp: new Date().toISOString()
+    };
+
+    // Menggunakan POST karena membawa data foto yang besar
+    // mode: 'no-cors' digunakan untuk menghindari kendala kebijakan CORS Google
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
       mode: "no-cors",
-      signal: controller.signal,
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "text/plain", // Menggunakan text/plain agar tidak memicu preflight CORS
+      },
+      body: JSON.stringify(payload),
     });
 
-    // no-cors always returns opaque response — treat as success
+    // Karena no-cors, kita anggap sukses jika tidak ada error lemparan fetch
     return { success: true };
   } catch (err) {
-    if (err.name === "AbortError") {
-      throw new Error("Koneksi timeout. Periksa koneksi internet Anda.");
-    }
-    throw new Error("Gagal mengirim data. Periksa koneksi internet Anda.");
-  } finally {
-    clearTimeout(timeout);
+    console.error("Spreadsheet Error:", err);
+    throw new Error("Gagal mengirim data. Pastikan koneksi internet stabil.");
   }
 }
-
