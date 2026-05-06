@@ -44,6 +44,7 @@ var TEXT_FIELDS = [
   "email",
 ];
 
+// Email dihapus dari sini — sekarang opsional
 var REQUIRED_TEXT_FIELDS = {
   namaLengkap: "Nama lengkap",
   nisn: "NISN",
@@ -54,7 +55,6 @@ var REQUIRED_TEXT_FIELDS = {
   namaAyah: "Nama Ayah/Wali",
   namaIbu: "Nama Ibu/Wali",
   noTelepon: "Nomor telepon",
-  email: "Email",
 };
 
 var HEADERS = [
@@ -225,21 +225,6 @@ function createAndTrashPermissionTestFile(folder, suffix, testPublicSharing) {
 }
 
 function createEditorSampleEvent() {
-  var samplePayload = {
-    namaLengkap: "Test Apps Script Editor",
-    nisn: "1234567890",
-    tempatTanggalLahir: "Cirebon, 01 Januari 2010",
-    jenisKelamin: "Putra",
-    masukPendidikan: "MTs NU Putra 1",
-    alamat: "Jl. Contoh No. 1, Cirebon",
-    namaAyah: "Ayah Test",
-    namaIbu: "Ibu Test",
-    noTelepon: "081234567890",
-    email: "test@example.com",
-    _timestamp: new Date().toISOString(),
-    _requestId: "editor-test",
-  };
-
   var samplePngBase64 =
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=";
   var sampleEvent = {
@@ -248,18 +233,19 @@ function createEditorSampleEvent() {
       type: "application/json",
       length: 0,
       contents: JSON.stringify({
-        namaLengkap: samplePayload.namaLengkap,
-        nisn: samplePayload.nisn,
-        tempatTanggalLahir: samplePayload.tempatTanggalLahir,
-        jenisKelamin: samplePayload.jenisKelamin,
-        masukPendidikan: samplePayload.masukPendidikan,
-        alamat: samplePayload.alamat,
-        namaAyah: samplePayload.namaAyah,
-        namaIbu: samplePayload.namaIbu,
-        noTelepon: samplePayload.noTelepon,
-        email: samplePayload.email,
-        _timestamp: samplePayload._timestamp,
-        _requestId: samplePayload._requestId,
+        namaLengkap: "Test Apps Script Editor",
+        nisn: "1234567890",
+        tempatTanggalLahir: "Cirebon, 01 Januari 2010",
+        jenisKelamin: "Putra",
+        masukPendidikan: "MTs NU Putra 1",
+        alamat: "Jl. Contoh No. 1, Cirebon",
+        namaAyah: "Ayah Test",
+        namaIbu: "Ibu Test",
+        noTelepon: "081234567890",
+        // email sengaja dikosongkan untuk tes kasus opsional
+        email: "",
+        _timestamp: new Date().toISOString(),
+        _requestId: "editor-test",
         fotoKKBase64: samplePngBase64,
         fotoKKName: "sample-kk.png",
         fotoKKMimeType: "image/png",
@@ -481,6 +467,7 @@ function stripDataUrlPrefix(value) {
 }
 
 function validateRegistration(registration) {
+  // Validasi field wajib
   Object.keys(REQUIRED_TEXT_FIELDS).forEach(function (fieldName) {
     if (!registration[fieldName]) {
       throw new Error(REQUIRED_TEXT_FIELDS[fieldName] + " wajib diisi.");
@@ -495,7 +482,11 @@ function validateRegistration(registration) {
     throw new Error("Nomor telepon tidak valid.");
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registration.email)) {
+  // Email opsional — hanya validasi format kalau ada isian
+  if (
+    registration.email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registration.email)
+  ) {
     throw new Error("Email tidak valid.");
   }
 

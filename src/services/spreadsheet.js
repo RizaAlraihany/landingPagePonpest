@@ -155,7 +155,6 @@ async function parseAppsScriptResponse(response) {
   }
 }
 
-
 export async function submitToSpreadsheet(formData) {
   if (!APPS_SCRIPT_URL) {
     throw new Error(
