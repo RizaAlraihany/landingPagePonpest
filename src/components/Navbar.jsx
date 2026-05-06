@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -13,7 +13,6 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -23,17 +22,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
-
-  useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const isHome = location.pathname === "/";
 
   return (
     <>
@@ -48,6 +41,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 md:h-20">
             <Link
               to="/"
+              onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 group flex-shrink-0"
             >
               <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl overflow-hidden shadow-md ring-1 ring-white/20 flex-shrink-0 bg-white flex items-center justify-center">
@@ -161,6 +155,7 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={() => setIsOpen(false)}
                 className="flex items-center px-4 py-3 rounded-2xl text-gray-700 font-semibold text-sm hover:bg-primary-50 hover:text-primary-700 transition-all duration-200"
               >
                 {link.label}
@@ -171,6 +166,7 @@ export default function Navbar() {
           <div className="px-4 pt-2">
             <Link
               to="/daftar"
+              onClick={() => setIsOpen(false)}
               className="flex items-center justify-center w-full py-3.5 bg-gold-500 text-primary-900 font-bold text-sm rounded-2xl hover:bg-gold-400 transition-colors"
             >
               Daftar Sekarang

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { submitToSpreadsheet } from "../services/spreadsheet";
+import { submitToSpreadsheet, validateOptionalUploadFile } from "../services/spreadsheet";
 import {
   User, Hash, MapPin, Calendar, Phone, Mail,
   Users, GraduationCap, CheckCircle2, AlertCircle, Loader2,
@@ -46,22 +46,25 @@ const validators = {
   namaIbu: (v) => !v.trim() ? "Nama Ibu/Wali wajib diisi" : "",
   noTelepon: (v) => !v.trim() ? "Nomor telepon wajib diisi" : !/^(\+62|62|0)[0-9]{8,12}$/.test(v.trim()) ? "Format tidak valid (contoh: 0812xxxxxxxx)" : "",
   email: (v) => !v.trim() ? "Email wajib diisi" : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? "Format email tidak valid" : "",
-  fotoKK: (v) => !v ? "Foto KK wajib diunggah" : "",
-  fotoIjazah: (v) => !v ? "Foto Ijazah wajib diunggah" : "",
+  fotoKK: (v) => validateOptionalUploadFile(v, "Foto KK"),
+  fotoIjazah: (v) => validateOptionalUploadFile(v, "Foto Ijazah"),
 };
 
 const inputBase = "w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition-colors focus:outline-none focus:ring-2";
 const inputNormal = "border-gray-200 focus:ring-primary-200 focus:border-primary-400 bg-white";
 const inputError = "border-red-300 focus:ring-red-100 bg-red-50/50";
 
-function FileUploadField({ label, name, value, onChange, onClear, error, touched, note }) {
+function FileUploadField({ label, name, value, onChange, onClear, error, touched, note, required = false }) {
   const ref = useRef();
   const hasError = touched && error;
+  const selectedFileClass = hasError
+    ? "bg-red-50/50 border-red-200 text-red-700"
+    : "bg-green-50 border-green-200 text-green-700";
 
   return (
     <div data-error={!!hasError}>
       <label className="block text-sm font-semibold text-gray-700 mb-1">
-        {label} <span className="text-red-500">*</span>
+        {label} {required ? <span className="text-red-500">*</span> : <span className="text-gray-400 font-medium">(opsional)</span>}
       </label>
       {note && (
         <p className="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 mb-2 flex items-center gap-1.5">
@@ -69,10 +72,17 @@ function FileUploadField({ label, name, value, onChange, onClear, error, touched
         </p>
       )}
       {value ? (
-        <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-          <FileImage className="w-5 h-5 text-green-600 flex-shrink-0" />
-          <span className="text-sm text-green-700 flex-1 truncate">{value.name}</span>
-          <button type="button" onClick={onClear} className="text-gray-400 hover:text-red-500 transition-colors">
+        <div className={`flex items-center gap-3 p-3 border rounded-xl ${selectedFileClass}`}>
+          <FileImage className={`w-5 h-5 flex-shrink-0 ${hasError ? "text-red-500" : "text-green-600"}`} />
+          <span className="text-sm flex-1 truncate">{value.name}</span>
+          <button
+            type="button"
+            onClick={() => {
+              if (ref.current) ref.current.value = "";
+              onClear();
+            }}
+            className="text-gray-400 hover:text-red-500 transition-colors"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -83,7 +93,7 @@ function FileUploadField({ label, name, value, onChange, onClear, error, touched
           className={`w-full flex flex-col items-center gap-2 py-5 rounded-xl border-2 border-dashed text-sm transition-all duration-200 hover:border-primary-400 hover:bg-primary-50/50 ${hasError ? "border-red-300 bg-red-50/50" : "border-gray-200 bg-gray-50/50"}`}
         >
           <Upload className="w-5 h-5 text-gray-400" />
-          <span className="text-gray-500">Klik untuk unggah foto</span>
+          <span className="text-gray-500">Klik untuk unggah file</span>
           <span className="text-xs text-gray-400">JPG, PNG, PDF (maks. 5MB)</span>
         </button>
       )}
@@ -91,9 +101,12 @@ function FileUploadField({ label, name, value, onChange, onClear, error, touched
         ref={ref}
         type="file"
         name={name}
-        accept="image/*,.pdf"
+        accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
         className="hidden"
-        onChange={(e) => onChange(e.target.files[0] || null)}
+        onChange={(e) => {
+          onChange(e.target.files?.[0] || null);
+          e.target.value = "";
+        }}
       />
       {hasError && (
         <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -116,6 +129,10 @@ export default function RegistrationForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (status === "error") {
+      setStatus("idle");
+      setErrorMsg("");
+    }
     if (touched[name]) setErrors((prev) => ({ ...prev, [name]: validate(name, value) }));
   };
 
@@ -129,6 +146,10 @@ export default function RegistrationForm() {
     setForm((prev) => ({ ...prev, [name]: file }));
     setTouched((prev) => ({ ...prev, [name]: true }));
     setErrors((prev) => ({ ...prev, [name]: validate(name, file) }));
+    if (status === "error") {
+      setStatus("idle");
+      setErrorMsg("");
+    }
   };
 
   const validateAll = () => {
@@ -144,15 +165,21 @@ export default function RegistrationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (status === "loading") return;
+
     if (!validateAll()) {
       document.querySelector("[data-error='true']")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+
     setStatus("loading");
+    setErrorMsg("");
+
     try {
       await submitToSpreadsheet(form);
       setStatus("success");
     } catch (err) {
+      console.error("Registration submit error:", err);
       setStatus("error");
       setErrorMsg(err.message || "Terjadi kesalahan. Coba lagi.");
     }
